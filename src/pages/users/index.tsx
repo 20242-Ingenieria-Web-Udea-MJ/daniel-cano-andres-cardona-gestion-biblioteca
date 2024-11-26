@@ -1,3 +1,9 @@
+import UsersTable from "@/src/components/organism/Users";
+
 export default function Users() {
-  return <div className="grid w-full">Usuarios</div>;
+  return (
+    <div className="grid w-full">
+      <UsersTable />
+    </div>
+  );
 }

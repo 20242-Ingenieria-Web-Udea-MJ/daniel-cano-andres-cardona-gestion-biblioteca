@@ -1,22 +1,16 @@
 import {
+  Book,
+  ChartLine,
   Home,
-  LineChart,
   Menu,
   Package,
-  Package2,
   Search,
-  ShoppingCart,
   Users,
 } from "lucide-react";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
-import { Badge } from "@/src/components/ui/badge";
+
 import { Button } from "@/src/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,67 +38,51 @@ const Index = () => {
         <SheetContent side="left" className="flex flex-col">
           <nav className="grid gap-2 text-lg font-medium">
             <Link
-              href="#"
+              href="/"
               className="flex items-center gap-2 text-lg font-semibold"
             >
-              <Package2 className="h-6 w-6" />
-              <span className="sr-only">Acme Inc</span>
+              <Book className="h-6 w-6" />
+              <span className="">Nombre Biblioteca</span>
             </Link>
             <Link
-              href="#"
+              href="/"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <Home className="h-5 w-5" />
-              Dashboard
+              Inicio
             </Link>
             <Link
-              href="#"
+              href="/inventory"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
             >
-              <ShoppingCart className="h-5 w-5" />
-              Orders
-              <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                6
-              </Badge>
+              <Package className="h-4 w-4" />
+              Inventario
             </Link>
             <Link
-              href="#"
+              href="/transactions"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
-              <Package className="h-5 w-5" />
-              Products
+              <ChartLine className="h-4 w-4" />
+              Transacciones
             </Link>
             <Link
-              href="#"
+              href="/users"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <Users className="h-5 w-5" />
-              Customers
-            </Link>
-            <Link
-              href="#"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <LineChart className="h-5 w-5" />
-              Analytics
+              Usuarios
             </Link>
           </nav>
-          <div className="mt-auto">
-            <Card>
-              <CardHeader className="p-2 pt-0 md:p-4 flex flex-row gap-5 justify-center items-center">
-                <Avatar>
-                  {/* <AvatarImage src={session?.user?.image} alt="@shadcn" /> */}
-                  <AvatarImage src="" alt="@shadcn" />
-                </Avatar>
-                <div className="flex flex-col items-center justify-center">
-                  <CardTitle>{session?.user?.name}Daniel</CardTitle>
-                  <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-                    {/* {session?.user?.role} */}
-                    Admin
-                  </CardContent>
-                </div>
-              </CardHeader>
-            </Card>
+          <div className="mt-auto p-4">
+            <div className="flex flex-col items-center gap-2">
+              <Avatar className="w-14 h-14">
+                <AvatarImage src={session?.user?.image} alt="@shadcn" />
+              </Avatar>
+              <div className="flex flex-col items-center justify-center">
+                <h3 className="font-bold">{session?.user?.name}</h3>
+                <p>{session?.user?.role}</p>
+              </div>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
@@ -124,18 +102,20 @@ const Index = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">
             <Avatar>
-              {/* <AvatarImage src={session?.user?.image} alt="@shadcn" /> */}
+              <AvatarImage src={session?.user?.image} alt="@shadcn" />
               <AvatarImage src="" alt="@shadcn" />
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => signOut()}
+            className="cursor-pointer"
+          >
+            Cerrar Sesión
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

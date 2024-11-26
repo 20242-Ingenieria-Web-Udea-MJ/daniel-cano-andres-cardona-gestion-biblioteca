@@ -1,3 +1,9 @@
+-- CreateEnum
+CREATE TYPE "Enum_RoleName" AS ENUM ('ADMIN', 'USER');
+
+-- CreateEnum
+CREATE TYPE "Enum_ReservationStatus" AS ENUM ('REQUESTED', 'BORROWED', 'AVAILABLE');
+
 -- CreateTable
 CREATE TABLE "Account" (
     "user_id" TEXT NOT NULL,
@@ -24,24 +30,44 @@ CREATE TABLE "Session" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT,
+    "role" "Enum_RoleName" NOT NULL DEFAULT 'USER',
     "email" TEXT,
     "email_verified" TIMESTAMP(3),
     "image" TEXT,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "enabled" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Products" (
+CREATE TABLE "Book" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
+    "title" TEXT NOT NULL,
+    "author" TEXT NOT NULL,
     "image" TEXT NOT NULL,
+    "genre" TEXT NOT NULL,
+    "copies_available" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Products_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Book_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Reservation" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "bookId" TEXT NOT NULL,
+    "status" "Enum_ReservationStatus" NOT NULL DEFAULT 'REQUESTED',
+    "borrowedAt" TIMESTAMP(3),
+    "returnedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Reservation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -67,3 +93,9 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_user_id_fkey" FOREIGN KEY ("user_i
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Reservation" ADD CONSTRAINT "Reservation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Reservation" ADD CONSTRAINT "Reservation_bookId_fkey" FOREIGN KEY ("bookId") REFERENCES "Book"("id") ON DELETE CASCADE ON UPDATE CASCADE;
