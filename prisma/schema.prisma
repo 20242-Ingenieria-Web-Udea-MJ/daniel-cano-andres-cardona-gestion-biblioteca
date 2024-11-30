@@ -50,33 +50,17 @@ model User {
   enabled       Boolean       @default(true)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  Reservation   Reservation[]
 }
 
 model Book {
-  id               String        @id @default(cuid())
+  id               String   @id @default(cuid())
   title            String
   author           String
   image            String
   genre            String
   copies_available Int
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  Reservation      Reservation[]
-}
-
-model Reservation {
-  id         String                 @id @default(cuid())
-  userId     String
-  bookId     String
-  status     Enum_ReservationStatus @default(REQUESTED)
-  borrowedAt DateTime?
-  returnedAt DateTime?
-  createdAt  DateTime               @default(now())
-  updatedAt  DateTime               @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -90,10 +74,4 @@ model VerificationToken {
 enum Enum_RoleName {
   ADMIN
   USER
-}
-
-enum Enum_ReservationStatus {
-  REQUESTED
-  BORROWED
-  AVAILABLE
 }

@@ -6,7 +6,7 @@ import { customTypes } from '@/graphql/custom/types';
 import { resolvers } from '@/prisma/generated/graphql/resolvers';
 import { types } from '@/prisma/generated/graphql/types';
 import { PrismaClient } from '@prisma/client';
-import prisma from '@/src/config/prisma';
+import prisma from '@/config/prisma';
 import Cors from 'micro-cors';
 import { customResolvers } from '@/graphql/custom/resolvers';
 import { IncomingMessage, ServerResponse } from 'http';
@@ -25,7 +25,10 @@ export const config = {
   },
 };
 
-const functionHandler = async (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
+const functionHandler = async (
+  req: IncomingMessage,
+  res: ServerResponse<IncomingMessage>
+) => {
   const apolloServer = new ApolloServer({
     context: (): Context => ({ prisma }),
     typeDefs: [...types, ...customTypes],

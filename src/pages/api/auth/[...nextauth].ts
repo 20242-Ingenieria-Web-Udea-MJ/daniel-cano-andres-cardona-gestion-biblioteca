@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import Auth0Provider from 'next-auth/providers/auth0';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/src/config/prisma';
+import prisma from '@/config/prisma';
 
 const options: NextAuthOptions = {
   callbacks: {
@@ -38,5 +38,6 @@ const options: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
 };
 
-export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options);
+export default (req: NextApiRequest, res: NextApiResponse) =>
+  NextAuth(req, res, options);
 export { options };

@@ -8,6 +8,15 @@ const CustomPruebaTypes = gql`
   type Query {
     pruebaQuery(id: ID): Prueba
   }
+
+  input Enum_RoleNameInput {
+    set: Enum_RoleName
+  }
+
+  enum Enum_RoleName {
+    USER
+    ADMIN
+  }
 `;
 
 export { CustomPruebaTypes };

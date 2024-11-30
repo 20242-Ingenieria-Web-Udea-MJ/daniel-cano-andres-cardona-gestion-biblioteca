@@ -9,11 +9,12 @@ const Auth0 = async (req: any, res: any) => {
     const { data } = req.body;
     let userData;
     try {
-      const { access_token: accessToken, token_type: tokenType } = await getAuth0Token().then(
-        (resToken) => resToken
-      );
+      const { access_token: accessToken, token_type: tokenType } =
+        await getAuth0Token().then((resToken) => resToken);
       data.connection = 'Username-Password-Authentication';
-      userData = await createAuth0User(data, accessToken, tokenType).then((resUser) => resUser);
+      userData = await createAuth0User(data, accessToken, tokenType).then(
+        (resUser) => resUser
+      );
     } catch (error) {
       req.status(409).send(`Error getting Auth0 token ${error}`);
     }

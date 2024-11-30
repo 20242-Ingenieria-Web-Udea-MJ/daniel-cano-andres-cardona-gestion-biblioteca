@@ -1,9 +1,6 @@
 -- CreateEnum
 CREATE TYPE "Enum_RoleName" AS ENUM ('ADMIN', 'USER');
 
--- CreateEnum
-CREATE TYPE "Enum_ReservationStatus" AS ENUM ('REQUESTED', 'BORROWED', 'AVAILABLE');
-
 -- CreateTable
 CREATE TABLE "Account" (
     "user_id" TEXT NOT NULL,
@@ -57,20 +54,6 @@ CREATE TABLE "Book" (
 );
 
 -- CreateTable
-CREATE TABLE "Reservation" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "bookId" TEXT NOT NULL,
-    "status" "Enum_ReservationStatus" NOT NULL DEFAULT 'REQUESTED',
-    "borrowedAt" TIMESTAMP(3),
-    "returnedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Reservation_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "VerificationToken" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
@@ -93,9 +76,3 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_user_id_fkey" FOREIGN KEY ("user_i
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Reservation" ADD CONSTRAINT "Reservation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Reservation" ADD CONSTRAINT "Reservation_bookId_fkey" FOREIGN KEY ("bookId") REFERENCES "Book"("id") ON DELETE CASCADE ON UPDATE CASCADE;
