@@ -53,7 +53,6 @@ const formSchema = z.object({
 
 export default function Index({ id }: { id: string }) {
   // const [user, setUser] = useState<User | null>(null);
-  // const [enabled, setEnabled] = useState(true);
 
   // const { form, formData, updateFormData } = useFormData({});
 
