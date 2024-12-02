@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-micro';
 const CustomUserTypes = gql`
   type Mutation {
     createUserCustom(data: userCreateInputCustom): User
+    deleteUserCustom(userId: String!): String!
   }
   type Query {
     userCustomSecure(token: String!): [User]

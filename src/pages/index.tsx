@@ -1,7 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-import safeJsonStringify from "safe-json-stringify";
-// import { useSession, signIn } from "next-auth/react";
-// import axios from "axios";
+import { PrismaClient } from '@prisma/client';
+import safeJsonStringify from 'safe-json-stringify';
+
+import Book from '@/src/components/molecules/Book';
+import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_BOOKS } from '../utils/graphql/queries/books';
+import { Book as BookType } from '@/src/types/book';
 
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
@@ -13,23 +17,22 @@ export async function getServerSideProps() {
   };
 }
 
-export default function Home({ users }: any) {
-  // const { data: session } = useSession();
-  // if (!session) {
-  //   signIn("auth0");
-  // }
-  // console.log("session", session, users);
-  // const getProducts = async () => {
-  //   await axios.get("https://fakestoreapi.com/products").then((res: any) => {
-  //     console.log("res", res);
-  //   });
-  // };
-  // getProducts();
+export default function Home() {
+  const [books, setBooks] = useState([]);
+
+  useQuery(GET_ALL_BOOKS, {
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (data) => {
+      setBooks(data.books);
+    },
+  });
 
   return (
-    <div className="grid w-full">
-      {/* <Sidebar />
-      <Navbar /> */}
+    <div className='grid w-full'>
+      <h1 className='text-3xl font-semibold mb-6'>Libros Disponibles</h1>
+      {books.map((book: BookType) => (
+        <Book key={book?.id} book={book} />
+      ))}
     </div>
   );
 }

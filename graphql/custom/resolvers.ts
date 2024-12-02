@@ -1,11 +1,11 @@
-import { CalculadoraResolvers } from './calculadora/resolvers';
+import BookCustomResolvers from './books/resolvers';
 import { PruebaResolvers } from './prueba/resolvers';
 import { UserCustomResolvers } from './users/resolvers';
 
 const customResolvers = [
-  CalculadoraResolvers,
   PruebaResolvers,
   UserCustomResolvers,
+  BookCustomResolvers,
 ];
 
 export { customResolvers };

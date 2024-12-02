@@ -50,17 +50,30 @@ model User {
   enabled       Boolean       @default(true)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  reservations  Reservation[] @relation(name: "ReservationToUser")
 }
 
 model Book {
-  id               String   @id @default(cuid())
+  id               String        @id @default(cuid())
   title            String
   author           String
   image            String
   genre            String
   copies_available Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  reservations     Reservation[] @relation(name: "ReservationToBook")
+}
+
+model Reservation {
+  id         String   @id @default(cuid())
+  userId     String
+  bookId     String
+  returned   Boolean  @default(false)
+  reservedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, name: "ReservationToUser")
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade, name: "ReservationToBook")
 }
 
 model VerificationToken {

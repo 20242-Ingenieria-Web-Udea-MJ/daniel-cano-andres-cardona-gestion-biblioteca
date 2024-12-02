@@ -8,8 +8,6 @@ export const UPDATE_USER = gql`
       email
       role
       image
-      deleted
-      enabled
       createdAt
       updatedAt
     }
@@ -26,11 +24,7 @@ export const CREATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($where: UserWhereUniqueInput!) {
-    deleteUserCustom(where: $where) {
-      id
-      name
-      email
-    }
+  mutation DeleteUser($userId: String!) {
+    deleteUserCustom(userId: $userId)
   }
 `;

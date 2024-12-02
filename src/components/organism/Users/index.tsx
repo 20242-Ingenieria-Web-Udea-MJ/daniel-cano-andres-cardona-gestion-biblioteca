@@ -21,14 +21,7 @@ import Link from 'next/link';
 import { Button } from '@/src/components/ui/button';
 import { Edit, Trash } from 'lucide-react';
 import { DELETE_USER } from '@/src/utils/graphql/mutations/users';
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  role: string;
-};
+import { User } from '@/src/types/user';
 
 export default function Component() {
   const [users, setUsers] = useState([]);
@@ -41,19 +34,14 @@ export default function Component() {
 
   const [deleteUser] = useMutation(DELETE_USER);
 
-  const handleDeleteUser = async (id: string) => {
-    // Por ahora solo lo elimina de Supabase
-    await deleteUser({
-      variables: {
-        userId: id,
-      },
-    })
-      .then(() => {
-        console.log('Eliminado correctamente');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleDelete = async (userId: string) => {
+    try {
+      const { data } = await deleteUser({ variables: { userId } });
+
+      console.log(data.deleteUserCustom);
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
+    }
   };
 
   return (
@@ -61,7 +49,6 @@ export default function Component() {
       <CardHeader className='px-7 flex flex-row justify-between items-center'>
         <div>
           <CardTitle>Usuarios</CardTitle>
-          {/* <CardDescription>Recent orders from your store.</CardDescription> */}
         </div>
         <Link href={`/users/new`}>
           <Button>+ Agregar Usuario</Button>
@@ -112,7 +99,7 @@ export default function Component() {
                   <Badge
                     className='text-xs cursor-pointer ml-2'
                     variant='destructive'
-                    onClick={() => handleDeleteUser(user.id)}
+                    onClick={() => handleDelete(user.id)}
                   >
                     <Trash />
                   </Badge>
