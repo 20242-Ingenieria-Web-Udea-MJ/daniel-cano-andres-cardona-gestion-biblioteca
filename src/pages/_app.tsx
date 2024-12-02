@@ -1,9 +1,10 @@
-import "-/styles/globals.css";
-import { SessionProvider } from "next-auth/react";
-import type { AppProps } from "next/app";
-import Layout from "@/src/components/organism/Layout";
-import { ApolloProvider } from "@apollo/client";
-import { client } from "@/graphql/client";
+import '-/styles/globals.css';
+import { SessionProvider } from 'next-auth/react';
+import type { AppProps } from 'next/app';
+import Layout from '@/src/components/organism/Layout';
+import { ApolloProvider } from '@apollo/client';
+import { client } from '@/graphql/client';
+import { Toaster } from '@/src/components/ui/toaster';
 
 export default function App({
   Component,
@@ -15,6 +16,7 @@ export default function App({
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        <Toaster />
       </SessionProvider>
     </ApolloProvider>
   );

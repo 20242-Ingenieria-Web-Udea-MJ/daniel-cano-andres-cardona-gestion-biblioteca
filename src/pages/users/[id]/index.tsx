@@ -29,6 +29,8 @@ import {
   SelectValue,
 } from '@/src/components/ui/select';
 import { useRouter } from 'next/router';
+import { useToast } from '@/src/hooks/use-toast';
+import ReactLoading from 'react-loading';
 
 const ROLE = [
   { id: '1', value: 'ADMIN', label: 'Admin' },
@@ -52,15 +54,10 @@ const formSchema = z.object({
 });
 
 export default function Index({ id }: { id: string }) {
-  // const [user, setUser] = useState<User | null>(null);
-
-  // const { form, formData, updateFormData } = useFormData({});
-
   const router = useRouter();
+  const { toast } = useToast();
+  const [updateUser, { loading: mutationLoading }] = useMutation(UPDATE_USER);
 
-  const [updateUser] = useMutation(UPDATE_USER);
-
-  /////////////////////////////////////
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,15 +68,12 @@ export default function Index({ id }: { id: string }) {
     },
   });
 
-  const [getUser] = useLazyQuery(GET_USER, {
+  const [getUser, { loading: querieLoading }] = useLazyQuery(GET_USER, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      // setUser(data.user);
       form.reset(data.user);
     },
   });
-
-  ////////////////////////////////////
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
@@ -106,47 +100,30 @@ export default function Index({ id }: { id: string }) {
       },
     })
       .then(() => {
-        console.log('Actualizado correctamente');
+        toast({
+          title: 'Actualizado correctamente',
+        });
       })
       .catch((err) => {
-        console.log(err);
+        toast({
+          title: err.message,
+          variant: 'destructive',
+        });
       });
 
     router.push('/users');
   };
 
-  // const handleSubmit = async (e: { preventDefault: () => void }) => {
-  //   e.preventDefault();
-  //   console.log(formData);
-  //   await updateUser({
-  //     variables: {
-  //       where: {
-  //         id: id,
-  //       },
-  //       data: {
-  //         name: {
-  //           set: formData.name,
-  //         },
-  //         email: {
-  //           set: formData.email,
-  //         },
-  //         role: {
-  //           set: formData.role,
-  //         },
-  //       },
-  //     },
-  //   })
-  //     .then(() => {
-  //       console.log('Actualizado correctamente');
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   useEffect(() => {
     getUser({ variables: { userId: id } });
   }, [id, getUser]);
+
+  if (querieLoading || mutationLoading)
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <ReactLoading type='spin' color='#2563EB' />
+      </div>
+    );
 
   return (
     <div>

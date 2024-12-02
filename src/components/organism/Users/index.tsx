@@ -22,9 +22,10 @@ import { Button } from '@/src/components/ui/button';
 import { Edit, Trash } from 'lucide-react';
 import { DELETE_USER } from '@/src/utils/graphql/mutations/users';
 import { User } from '@/src/types/user';
+import { useToast } from '@/src/hooks/use-toast';
 
 export default function Component() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   useQuery(GET_ALL_USERS, {
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
@@ -34,13 +35,24 @@ export default function Component() {
 
   const [deleteUser] = useMutation(DELETE_USER);
 
+  const { toast } = useToast();
+
   const handleDelete = async (userId: string) => {
     try {
       const { data } = await deleteUser({ variables: { userId } });
 
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+
       console.log(data.deleteUserCustom);
+
+      toast({
+        title: 'El usuario se ha eliminado correctamente.',
+      });
     } catch (error) {
-      console.error('Error al eliminar usuario:', error);
+      toast({
+        title: `Error al eliminar el usuario. ${error}`,
+        variant: 'destructive',
+      });
     }
   };
 
