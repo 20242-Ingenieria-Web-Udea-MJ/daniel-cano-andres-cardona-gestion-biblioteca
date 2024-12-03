@@ -1,6 +1,18 @@
 import prisma from 'config/prisma';
 
 const BookCustomResolvers = {
+  Query: {
+    // Obtener todos los libros
+    books: async () => {
+      return prisma.book.findMany();
+    },
+
+    // Obtener un libro por ID
+    book: async (_: any, { id }: { id: string }) => {
+      return prisma.book.findUnique({ where: { id } });
+    },
+  },
+
   Mutation: {
     reserveBook: async (
       _: any,
@@ -103,6 +115,31 @@ const BookCustomResolvers = {
           error.message || 'Hubo un problema al marcar el libro como devuelto.'
         );
       }
+    },
+
+    createBook: async (
+      _: any,
+      { title, author, image, genre, copies_available }: any
+    ) => {
+      return prisma.book.create({
+        data: { title, author, image, genre, copies_available },
+      });
+    },
+
+    updateBook: async (
+      _: any,
+      { id, title, author, image, genre, copies_available }: any
+    ) => {
+      return prisma.book.update({
+        where: { id },
+        data: { title, author, image, genre, copies_available },
+      });
+    },
+
+    deleteBook: async (_: any, { id }: { id: string }) => {
+      return prisma.book.delete({
+        where: { id },
+      });
     },
   },
 };
