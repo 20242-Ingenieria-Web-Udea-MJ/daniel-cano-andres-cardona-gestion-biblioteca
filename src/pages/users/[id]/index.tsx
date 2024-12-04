@@ -32,6 +32,8 @@ import { useRouter } from 'next/router';
 import { useToast } from '@/src/hooks/use-toast';
 import ReactLoading from 'react-loading';
 
+import { useSession } from 'next-auth/react';
+
 const ROLE = [
   { id: '1', value: 'ADMIN', label: 'Admin' },
   { id: '2', value: 'USER', label: 'Usuario' },
@@ -54,6 +56,8 @@ const formSchema = z.object({
 });
 
 export default function Index({ id }: { id: string }) {
+  const { data: session, status } = useSession();
+
   const router = useRouter();
   const { toast } = useToast();
   const [updateUser, { loading: mutationLoading }] = useMutation(UPDATE_USER);
@@ -124,6 +128,10 @@ export default function Index({ id }: { id: string }) {
         <ReactLoading type='spin' color='#2563EB' />
       </div>
     );
+
+  if (status === 'loading') return <ReactLoading type='spin' color='#2563EB' />;
+
+  if (session?.user.role !== 'ADMIN') return <div>Acceso denegado</div>;
 
   return (
     <div>

@@ -20,7 +20,7 @@ export async function getServerSideProps() {
 export default function Home() {
   const [books, setBooks] = useState([]);
 
-  useQuery(GET_ALL_BOOKS, {
+  const { refetch } = useQuery(GET_ALL_BOOKS, {
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       setBooks(data.books);
@@ -30,9 +30,13 @@ export default function Home() {
   return (
     <div className='grid w-full'>
       <h1 className='text-3xl font-semibold mb-6'>Libros Disponibles</h1>
-      {books.map((book: BookType) => (
-        <Book key={book?.id} book={book} />
-      ))}
+      <div className='flex flex-wrap gap-4'>
+        {books.map((book: BookType) => (
+          <div key={book.id} className='max-w-[300px]'>
+            <Book book={book} refetch={refetch} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

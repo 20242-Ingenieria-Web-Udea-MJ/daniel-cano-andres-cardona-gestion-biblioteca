@@ -8,10 +8,19 @@ import Image from 'next/image';
 import { Button } from '@/src/components/ui/button';
 import { Book } from '@/src/types/book';
 import { RESERVE_BOOK } from '@/src/utils/graphql/mutations/book';
-import { useMutation } from '@apollo/client';
+import { ApolloQueryResult, useMutation } from '@apollo/client';
 import { useSession } from 'next-auth/react';
+import { useToast } from '@/src/hooks/use-toast';
 
-const Index = ({ book }: { book: Book }) => {
+const Index = ({
+  book,
+  refetch,
+}: {
+  book: Book;
+  refetch: () => Promise<ApolloQueryResult<Book>>;
+}) => {
+  const { toast } = useToast();
+
   const [reserveBook] = useMutation(RESERVE_BOOK);
   const { data: session } = useSession();
 
@@ -23,11 +32,17 @@ const Index = ({ book }: { book: Book }) => {
       const response = await reserveBook({
         variables: { userId, bookId },
       });
-      console.log('Reserva exitosa:', response.data.reserveBook);
-      alert('Reserva realizada con éxito');
-    } catch (err) {
-      console.error('Error al reservar:', err.message);
-      alert('Hubo un error al realizar la reserva. Inténtalo de nuevo.');
+
+      toast({
+        title: response.data.reserveBook,
+      });
+
+      await refetch();
+    } catch (error) {
+      toast({
+        title: 'Hubo un error al realizar la reserva. Inténtalo de nuevo.',
+        variant: 'destructive',
+      });
     }
   };
 

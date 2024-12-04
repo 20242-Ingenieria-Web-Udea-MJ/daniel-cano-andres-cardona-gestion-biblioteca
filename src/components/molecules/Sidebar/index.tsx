@@ -5,8 +5,15 @@ import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
 
 import { useSession } from 'next-auth/react';
 
+import PrivateComponent from '@/src/components/organism/Private';
+import { useRouter } from 'next/router';
+
 const Index = () => {
   const { data: session } = useSession();
+
+  const router = useRouter();
+
+  const isActive = (path: string) => router.pathname === path;
 
   return (
     <div className='hidden border-r bg-muted/40 md:block'>
@@ -14,7 +21,7 @@ const Index = () => {
         <div className='flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6'>
           <Link href='/' className='flex items-center gap-2 font-semibold'>
             <Book className='h-6 w-6' />
-            <span className=''>Nombre Biblioteca</span>
+            <span className=''>Biblioteca El Gato Negro</span>
           </Link>
         </div>
         <div className='mt-auto p-4'>
@@ -32,32 +39,46 @@ const Index = () => {
           <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
             <Link
               href='/'
-              className='flex items-center gap-3 rounded-lg px-3 py-2  text-primary transition-all hover:text-primary'
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${
+                isActive('/') ? 'text-primary' : 'text-muted-foreground'
+              }`}
             >
               <Home className='h-4 w-4' />
               Inicio
             </Link>
             <Link
               href='/inventory'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${
+                isActive('/inventory')
+                  ? 'text-primary'
+                  : 'text-muted-foreground'
+              }`}
             >
               <Package className='h-4 w-4' />
               Inventario
             </Link>
             <Link
               href='/reservations'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${
+                isActive('/reservations')
+                  ? 'text-primary'
+                  : 'text-muted-foreground'
+              }`}
             >
               <Book className='h-4 w-4' />
               Reservaciones
             </Link>
-            <Link
-              href='/users'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-            >
-              <Users className='h-4 w-4' />
-              Usuarios
-            </Link>
+            <PrivateComponent allowedRoles={['ADMIN']}>
+              <Link
+                href='/users'
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${
+                  isActive('/users') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                <Users className='h-4 w-4' />
+                Usuarios
+              </Link>
+            </PrivateComponent>
           </nav>
         </div>
       </div>

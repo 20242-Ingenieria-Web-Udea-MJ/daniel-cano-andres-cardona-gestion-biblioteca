@@ -18,6 +18,9 @@ import { CREATE_USER } from '@/src/utils/graphql/mutations/users';
 import { useRouter } from 'next/router';
 import { useToast } from '@/src/hooks/use-toast';
 
+import { useSession } from 'next-auth/react';
+import ReactLoading from 'react-loading';
+
 const FormSchema = z.object({
   username: z.string().min(2, {
     message: 'El nombre debe tener al menos 2 caracteres.',
@@ -28,6 +31,8 @@ const FormSchema = z.object({
 });
 
 export default function InputForm() {
+  const { data: session, status } = useSession();
+
   const router = useRouter();
   const { toast } = useToast();
 
@@ -92,6 +97,10 @@ export default function InputForm() {
       console.log(error);
     }
   }
+
+  if (status === 'loading') return <ReactLoading type='spin' color='#2563EB' />;
+
+  if (session?.user.role !== 'ADMIN') return <div>Acceso denegado</div>;
 
   return (
     <div>

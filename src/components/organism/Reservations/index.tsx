@@ -23,11 +23,17 @@ import { useState } from 'react';
 import { GET_ALL_RESERVATIONS } from '@/src/utils/graphql/queries/reservation';
 import { Reservation } from '@/src/types/reservation';
 import { MARK_AS_RETURNED } from '@/src/utils/graphql/mutations/book';
+import { useSession } from 'next-auth/react';
+import { useToast } from '@/src/hooks/use-toast';
 
 export default function Component() {
+  const { data: session } = useSession();
+
+  const { toast } = useToast();
+
   const [reservations, setReservations] = useState([]);
 
-  useQuery(GET_ALL_RESERVATIONS, {
+  const { refetch } = useQuery(GET_ALL_RESERVATIONS, {
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       setReservations(data.reservations);
@@ -41,13 +47,25 @@ export default function Component() {
       await markAsReturned({
         variables: { reservationId },
       });
-      alert('La devolución se ha registrado con éxito.');
+
+      toast({
+        title: 'La devolución se ha registrado con éxito',
+      });
+
+      await refetch();
     } catch (error) {
+      // @ts-expect-error fix type
       if (error.message.includes('Este libro ya fue marcado como devuelto')) {
-        alert('Este libro ya fue marcado como devuelto.');
+        toast({
+          title: 'Este libro ya fue marcado como devuelto',
+          variant: 'destructive',
+        });
       } else {
-        console.error('Error al devolver el libro:', error);
         alert('Hubo un problema al devolver el libro.');
+        toast({
+          title: 'Hubo un problema al devolver el libro' + error,
+          variant: 'destructive',
+        });
       }
     }
   };
@@ -84,7 +102,7 @@ export default function Component() {
                 Autor
               </TableHead>
               <TableHead className='hidden md:table-cell text-center'>
-                Acciones
+                Estado
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -114,9 +132,18 @@ export default function Component() {
                 </TableCell>
                 <TableCell className='hidden sm:table-cell text-center'>
                   {!reservation.returned ? (
-                    <Button onClick={() => handleReturnBook(reservation.id)}>
-                      Registrar Devolución
-                    </Button>
+                    session?.user.role === 'ADMIN' ? (
+                      <Button onClick={() => handleReturnBook(reservation.id)}>
+                        Registrar Devolución
+                      </Button>
+                    ) : (
+                      <Badge
+                        className='bg-blue-600 text-white'
+                        variant='outline'
+                      >
+                        Pendiente
+                      </Badge>
+                    )
                   ) : (
                     <Badge
                       className='bg-green-600 text-white'
