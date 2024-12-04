@@ -1,0 +1,39 @@
+name: CI/CD
+on: [push]
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.x
+      - name: Install dependencies
+        run: yarn install
+      - name: Generate resolvers
+        run: yarn generate
+      - name: Build
+        run: yarn build
+  Deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.x
+      - name: Install Vercel CLI
+        run: yarn global add vercel@latest
+      - name: Pull Vercel Environmental Variables
+        run: vercel pull --yes --token=${{secrets.VERCEL_TOKEN}}
+      - name: Trigger Vercel deployment
+        run: vercel deploy --no-wait --token=${{secrets.VERCEL_TOKEN}}
