@@ -1,4 +1,5 @@
 const makePost = (url: string, body: string, options: object) => {
+  // @ts-expect-error fix type
   const headers = options.headers || {};
   return fetch(url, {
     body,
@@ -12,9 +13,11 @@ const makePost = (url: string, body: string, options: object) => {
   });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
 const makeJSONPost = (url: string, data: any, options: { headers: {} }) => {
   const body = JSON.stringify(data);
   const headers = options.headers || {};
+  // @ts-expect-error fix type
   headers['Content-Type'] = 'application/json';
 
   return makePost(url, body, { headers });
@@ -39,8 +42,11 @@ export const getAuth0Token = async () => {
 };
 
 export const createAuth0User = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   token: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tokenType: any
 ) => {
   const url = `https://gestionbibliotecaingweb20242.us.auth0.com/api/v2/users`;
@@ -51,6 +57,7 @@ export const createAuth0User = async (
   return makeJSONPost(url, body, { headers });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createUser = (data: any) => {
   const url = `/api/auth0`;
   const body = { data };

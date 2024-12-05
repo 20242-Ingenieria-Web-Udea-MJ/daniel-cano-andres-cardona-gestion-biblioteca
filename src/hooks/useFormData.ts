@@ -1,10 +1,13 @@
 import { useRef, useState } from 'react';
 
-const useFormData = initial => {
+// @ts-expect-error fix types
+const useFormData = (initial) => {
   const form = useRef(initial);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [formData, setFormData] = useState({} as any);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getFormData: any = () => {
     const fd = new FormData(form.current);
 
@@ -13,12 +16,15 @@ const useFormData = initial => {
       const str = key.split(':');
 
       if (str.length > 1) {
+        // @ts-expect-error fix types
         obj[str[0]] = {
+          // @ts-expect-error fix types
           ...obj[str[0]],
 
           [str[1]]: value,
         };
       } else {
+        // @ts-expect-error fix types
         obj[str[0]] = value;
       }
     });

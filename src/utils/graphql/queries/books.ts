@@ -12,3 +12,16 @@ export const GET_ALL_BOOKS = gql`
     }
   }
 `;
+
+export const GET_BOOK = gql`
+  query Query($bookId: String!) {
+    book(id: $bookId) {
+      id
+      title
+      author
+      genre
+      image
+      copies_available
+    }
+  }
+`;

@@ -1,12 +1,4 @@
-import {
-  Book,
-  ChartLine,
-  Home,
-  Menu,
-  Package,
-  Search,
-  Users,
-} from 'lucide-react';
+import { Book, ChartLine, Home, Menu, Package, Users } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
 
 import { Button } from '@/src/components/ui/button';
@@ -19,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/src/components/ui/dropdown-menu';
-import { Input } from '@/src/components/ui/input';
+
 import { Sheet, SheetContent, SheetTrigger } from '@/src/components/ui/sheet';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';

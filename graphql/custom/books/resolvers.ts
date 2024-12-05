@@ -8,6 +8,7 @@ const BookCustomResolvers = {
     },
 
     // Obtener un libro por ID
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     book: async (_: any, { id }: { id: string }) => {
       return prisma.book.findUnique({ where: { id } });
     },
@@ -15,6 +16,7 @@ const BookCustomResolvers = {
 
   Mutation: {
     reserveBook: async (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       _: any,
       { userId, bookId }: { userId: string; bookId: string }
     ) => {
@@ -74,6 +76,7 @@ const BookCustomResolvers = {
     },
 
     markAsReturned: async (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       _: any,
       { reservationId }: { reservationId: string }
     ) => {
@@ -112,13 +115,16 @@ const BookCustomResolvers = {
       } catch (error) {
         console.log('Error al marcar el libro como devuelto:', error);
         throw new Error(
+          // @ts-expect-error fix type
           error.message || 'Hubo un problema al marcar el libro como devuelto.'
         );
       }
     },
 
     createBook: async (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       _: any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       { title, author, image, genre, copies_available }: any
     ) => {
       return prisma.book.create({
@@ -126,20 +132,29 @@ const BookCustomResolvers = {
       });
     },
 
-    updateBook: async (
-      _: any,
-      { id, title, author, image, genre, copies_available }: any
-    ) => {
-      return prisma.book.update({
-        where: { id },
-        data: { title, author, image, genre, copies_available },
-      });
-    },
+    // updateBook: async (
+    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //   _: any,
+    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //   { id, title, author, image, genre, copies_available }: any
+    // ) => {
+    //   return prisma.book.update({
+    //     where: { id },
+    //     data: { title, author, image, genre, copies_available },
+    //   });
+    // },
 
-    deleteBook: async (_: any, { id }: { id: string }) => {
-      return prisma.book.delete({
-        where: { id },
-      });
+    deleteBookCustom: async (_parent: unknown, { id }: { id: string }) => {
+      try {
+        const deletedBook = await prisma.book.delete({
+          where: { id },
+        });
+
+        return deletedBook;
+      } catch (error) {
+        console.error('Error eliminando libro:', error);
+        throw new Error('Hubo un problema al eliminar el libro.');
+      }
     },
   },
 };

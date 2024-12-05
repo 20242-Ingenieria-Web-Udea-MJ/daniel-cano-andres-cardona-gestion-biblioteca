@@ -229,44 +229,6 @@ export default function Index({ id }: { id: string }) {
           </form>
         </Form>
       </div>
-      {/* <CldUploadButton uploadPreset='UdeA Inge Web' /> */}
-      {/* <form ref={form} onChange={updateFormData} onSubmit={handleSubmit}>
-        <div className='grid grid-cols-2 gap-10 mx-auto max-w-xl'>
-          <div className='col-span-2 flex flex-col justify-center items-center'>
-            <UploadImage image={user?.image} />
-            <Label htmlFor='picture' className='mt-4'>
-              Image
-            </Label>
-            <Input id='picture' type='file' />
-          </div>
-          <div>
-            <Label htmlFor='email'>Email</Label>
-
-            <Input id='email' type='email' name='email' />
-          </div>
-          <div>
-            <Label htmlFor='name'>Name</Label>
-
-            <Input id='name' name='name' type='text' />
-          </div>
-          <div className='flex flex-col justify-center items-start gap-1'>
-            <Label htmlFor='name'>Role</Label>
-
-            <DropDown data={ROLE} />
-          </div>
-          <div className='flex flex-col justify-center items-start gap-1'>
-            <Switch
-              id='enabled'
-              title='Enabled'
-              data={enabled}
-              setData={setEnabled}
-            />
-          </div>
-        </div>
-        <div className='flex justify-center mt-6'>
-          <Button type='submit'>Confirmar</Button>
-        </div>
-      </form> */}
     </div>
   );
 }

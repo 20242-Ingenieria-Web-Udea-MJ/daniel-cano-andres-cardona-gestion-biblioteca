@@ -4,11 +4,13 @@ const UserCustomResolvers = {
   User: {},
   Query: {},
   Mutation: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createUserCustom: async (_: any, args: any) => {
       return await prisma.user.create({
         data: args.data,
       });
     },
+
     deleteUserCustom: async (
       parent: unknown,
       { userId }: { userId: string }

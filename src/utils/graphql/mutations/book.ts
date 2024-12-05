@@ -1,8 +1,20 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_BOOK = gql`
-  mutation CreateBook($data: BookCreateInput) {
-    createBook(data: $data) {
+  mutation CreateBook(
+    $title: String!
+    $author: String!
+    $image: String!
+    $genre: String!
+    $copies_available: Int!
+  ) {
+    createBook(
+      title: $title
+      author: $author
+      image: $image
+      genre: $genre
+      copies_available: $copies_available
+    ) {
       id
       title
       author
@@ -26,27 +38,13 @@ export const MARK_AS_RETURNED = gql`
 `;
 
 export const UPDATE_BOOK = gql`
-  mutation UpdateBook(
-    $id: String!
-    $title: String
-    $author: String
-    $image: String
-    $genre: String
-    $copies_available: Int
-  ) {
-    updateBook(
-      id: $id
-      title: $title
-      author: $author
-      image: $image
-      genre: $genre
-      copies_available: $copies_available
-    ) {
+  mutation Mutation($where: BookWhereUniqueInput!, $data: BookUpdateInput) {
+    updateBook(where: $where, data: $data) {
       id
-      title
-      author
       image
+      title
       genre
+      author
       copies_available
     }
   }
@@ -54,7 +52,7 @@ export const UPDATE_BOOK = gql`
 
 export const DELETE_BOOK = gql`
   mutation DeleteBook($id: String!) {
-    deleteBook(id: $id) {
+    deleteBookCustom(id: $id) {
       id
       title
       author

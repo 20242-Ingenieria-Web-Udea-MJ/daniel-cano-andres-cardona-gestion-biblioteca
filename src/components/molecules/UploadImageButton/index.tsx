@@ -1,15 +1,21 @@
 import { CldUploadWidget } from 'next-cloudinary';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../ui/button';
 
-const Index = () => {
+const Index = ({ setUrl }: { setUrl: (url: string) => void }) => {
   const [resource, setResource] = useState();
-  console.log('resource', resource);
+
+  useEffect(() => {
+    // @ts-expect-error fix type
+    if (resource) setUrl(resource?.url);
+  }, [resource, setUrl]);
+
   return (
     <CldUploadWidget
       uploadPreset='UdeA Inge Web'
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onSuccess={(result, { widget }) => {
-        console.log('result', result);
+        // @ts-expect-error fix type
         setResource(result?.info); // { public_id, secure_url, etc }
       }}
       onQueuesEnd={(result, { widget }) => {

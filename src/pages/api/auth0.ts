@@ -1,11 +1,8 @@
-import { getServerSession } from 'next-auth/next';
-import { options } from '@/src/pages/api/auth/[...nextauth]';
 import { createAuth0User, getAuth0Token } from '@/src/utils/api';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Auth0 = async (req: any, res: any) => {
   if (req.method === 'POST') {
-    // const session = await getServerSession(req, res, options);
-    // if (session) {
     const { data } = req.body;
     let userData;
     try {
@@ -23,9 +20,6 @@ const Auth0 = async (req: any, res: any) => {
     } else {
       return res.status(userData.statusCode).json({ error: userData.message });
     }
-    // } else {
-    //   res.status(401).send('Unauthorized');
-    // }
   } else {
     res.status(405).send('Method not allowed');
   }

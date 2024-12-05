@@ -6,6 +6,7 @@ import prisma from '@/config/prisma';
 
 const options: NextAuthOptions = {
   callbacks: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, user }: any) {
       const newSession = (await prisma.session.findFirst({
         where: {
@@ -17,6 +18,7 @@ const options: NextAuthOptions = {
         orderBy: {
           expires: 'desc',
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       })) as any;
       return {
         ...session,

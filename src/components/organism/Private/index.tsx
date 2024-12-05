@@ -17,9 +17,9 @@ function Index({
 
   // @ts-expect-error fix type
   if (allowedRoles.includes(role)) {
-    return <div>{children}</div>;
+    return <>{children}</>;
   }
-  return <div>{elseComponent}</div>;
+  return <>{elseComponent}</>;
 }
 
 export default Index;
