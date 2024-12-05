@@ -40,6 +40,7 @@ const options: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (req: NextApiRequest, res: NextApiResponse) =>
   NextAuth(req, res, options);
 export { options };
