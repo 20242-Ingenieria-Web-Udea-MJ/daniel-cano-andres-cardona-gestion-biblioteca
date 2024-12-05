@@ -6,6 +6,9 @@ declare global {
 
 let client: ApolloClient<object>;
 
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/graphql';
+
 if (process.env.NODE_ENV === 'production') {
   client = new ApolloClient({
     cache: new InMemoryCache({
@@ -14,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
     link: from([
       new HttpLink({
         // eslint-disable-next-line no-nested-ternary
-        uri: 'http://localhost:3000/api/graphql',
+        uri: apiUrl,
       }),
     ]),
     connectToDevTools: true,
@@ -27,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
       cache: new InMemoryCache(),
       link: from([
         new HttpLink({
-          uri: 'http://localhost:3000/api/graphql',
+          uri: apiUrl,
         }),
       ]),
       connectToDevTools: true,
