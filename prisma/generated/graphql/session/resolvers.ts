@@ -17,6 +17,7 @@ const SessionResolvers = {
     session: async (_: any, args: any) => {
       return await prisma.session.findUnique({
         where: {
+          // @ts-expect-error fix type
           id: args.id,
         },
       });
@@ -34,6 +35,7 @@ const SessionResolvers = {
     updateSession: async (_: any, args: any) => {
       return await prisma.session.update({
         where: {
+          // @ts-expect-error fix type
           id: args.where.id,
         },
         data: {
@@ -47,6 +49,7 @@ const SessionResolvers = {
     deleteSession: async (_: any, args: any) => {
       return await prisma.session.delete({
         where: {
+          // @ts-expect-error fix type
           id: args.where.id,
         },
       });
