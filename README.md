@@ -50,3 +50,7 @@
   <li>Ejecutar el comando <i>yarn generate</i></li>
   <li>Ejecutar el comando <i>yarn dev</i></li>
 </ol>
+
+<h2>Despliegue en Vercel</h2>
+
+<p>https://daniel-cano-andres-cardona-gestion-biblioteca.vercel.app/</p>
