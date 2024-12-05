@@ -7,7 +7,7 @@
     "build": "yarn generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "npx prisma generate && yarn cosmo",
+    "generate": "npx prisma generate",
     "cosmo": "cosmo && prettier --config .prettierrc prisma/generated/graphql/**/*.ts --write"
   },
   "dependencies": {
